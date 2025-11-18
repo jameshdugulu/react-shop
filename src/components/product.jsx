@@ -1,47 +1,34 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './product.module.css';
 
 
 export function Product(props){
+const [isHovered, setIsHovered] = useState(false);
+const navigate = useNavigate();
 
-
-  const cardStyle = {
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '15px',
-    Width: '30px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  };
-
-  const imgStyle = {
-    width: '100%',
-    borderRadius: '4px',
-    height: '200px'
-  };
-
-  const figureStyle ={
-    width: '100%'
-    
+const handleProductClick = () => {
+  if (props.id) {
+    navigate(`/product/${props.id}`);
   }
+};
 
-  const buttonStyle = {
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer'
-  };
   return( 
   <>
-      <article style={cardStyle}>
-        <figure style={figureStyle}>
-          <img src={props.imgUrl} alt={props.name} style={imgStyle} />
-          <figcaption>{props.description}</figcaption>
+      <div className={`${styles.card} ${isHovered ? styles.cardHovered : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleProductClick}
+        style={{ cursor: props.id ? 'pointer' : 'default' }}>
+        <figure className={styles.figure}>
+          <img src={props.imgUrl} alt={props.name} className={styles.img} />
+          <figcaption className={styles.figcaption}>{props.description}</figcaption>
         </figure>
-        <h1>{props.name}</h1>
-        <h2>{props.price}</h2>
-        <button style={buttonStyle}>Buy</button>
-      </article>
+        <h2 className={styles.title}>{props.name}</h2>
+        <h3 className={styles.price}>${props.price}</h3>
+        <button className={styles.button} onClick={(e) => { e.stopPropagation(); }}>Buy</button>
+      </div>
   </>);
 }
 
