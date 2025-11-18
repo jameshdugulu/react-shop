@@ -20,18 +20,18 @@
   --font-bold: 700;
   
   /* Colors */
-  --color-primary:  #382ecc;
-  --color-primary-dark: #2771ae;
-  --color-secondary: #7e96d7;
+  --color-primary:  rgb(244, 244, 244);
+  --color-primary-dark: #230deb;
+  --color-secondary: #2c3e50;
   --color-secondary-dark: #2c2271;
-  --color-accent: #e74c3c;
+  --color-accent: #3c7ee7;
   
   /* Neutral Colors */
-  --color-text: #2c3e50;
-  --color-text-light: #7f8c8d;
-  --color-background: #ffffff;
+  --color-text: rgb(0, 32, 120);
+  --color-text-light: #e1e4e4;
+  --color-background: white;
   --color-background-alt: #f8f9fa;
-  --color-border: #e2e8f0;
+  --color-border: #00060e;
   
   /* Spacing */
   --spacing-xs: 0.25rem;   /* 4px */
@@ -73,7 +73,7 @@
 body {
   font-family: var(--font-primary);
   color: var(--color-text);
-  background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-primary));
+  background: var(--color-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

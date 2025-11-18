@@ -44,11 +44,11 @@
 .price {
   margin: 3px 0;
   font-size: 1rem;
-  color: #007bff;
+  color: var(--color-accent);
 }
 
 .button {
-  background-color: #007bff;
+  background-color: var(--color-accent);
   color: white;
   border: none;
   padding: 8px 14px;

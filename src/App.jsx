@@ -12,7 +12,7 @@ function App() {
   return (  
     <> 
     <div className="app">
-      <strong>Shop</strong>
+      <strong>Internship Project</strong>
       <Headers />
       <main className="main">
         <Routes>
