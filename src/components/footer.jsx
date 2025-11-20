@@ -31,7 +31,7 @@ export function Footer() {
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} React Shop. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} student@20908-2023 @unilak React. All rights reserved.</p>
       </div>
     </footer>
   )

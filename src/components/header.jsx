@@ -30,6 +30,7 @@ export function Headers(){
             <li><Link to="/" onClick={closeMenu}>Home</Link></li>
             <li><Link to="/store" onClick={closeMenu}>Store</Link></li>
             <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
+            <li><Link to="/admin" onClick={closeMenu}>Admin</Link></li>
             <li><button className={styles.loginBtn} onClick={closeMenu}>Login</button></li>
           </ul>
         </nav>
