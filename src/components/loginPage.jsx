@@ -1,83 +1,201 @@
-function Login() {
-  return (
-      <div
-        className="
-          sticky top-10 bg-white h-[max-content] w-full max-w-md mx-auto 
-          p-10 rounded-lg shadow-lg flex flex-col gap-6 justify-center
-        "
-      >
-        <h1 className="text-2xl font-semibold text-center mb-10">Welcome Back</h1>
+import { useState } from 'react';
+import { useAuth } from '../context/useAuth';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './loginPage.module.css';
 
-        <form className="space-y-4 p-10">
+function LoginPage({ onClose }) {
+  const { login, googleLogin, forgotPassword } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      await login(email, password);
+      navigate('/');
+    } catch {    
+      setError('Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      // For demo purposes, using mock Google credentials
+      // In a real app, this would integrate with Google OAuth
+      await googleLogin(email || 'demo@example.com', 'Demo User');
+      navigate('/');
+    } catch {
+      setError('Google login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+    setError('');
+    try {
+      await forgotPassword(resetEmail);
+      setMessage('Password reset email sent successfully!');
+    } catch {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.loginContainer}>
+      <div className={styles.closeButton} onClick={onClose}>×</div>
+      
+      <h1 className={styles.title}>
+        {isResetMode ? 'Reset Password' : 'Welcome Back'}
+      </h1>
+
+      {!isResetMode ? (
+        <form className={styles.form} onSubmit={handleLogin}>
           {/* Email */}
-          <div className="flex flex-col">
-            <label htmlFor="email" className="font-medium mb-1">Email</label>
+          <div className={styles.formGroup}>
+            <label htmlFor="email" className={styles.label}>Email</label>
             <input
               type="email"
               id="email"
-              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={styles.input}
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
           {/* Password */}
-          <div className="flex flex-col">
-            <label htmlFor="password" className="font-medium mb-1">Password</label>
+          <div className={styles.formGroup}>
+            <label htmlFor="password" className={styles.label}>Password</label>
             <input
               type="password"
               id="password"
-              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={styles.input}
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
           {/* Forgot Password */}
-          <div className="text-right">
-            <a href="#" className="text-sm text-indigo-500 hover:underline">
+          <div className={styles.forgotPassword}>
+            <button
+              type="button"
+              className={styles.linkButton}
+              onClick={() => setIsResetMode(true)}
+            >
               Forgot password?
-            </a>
+            </button>
           </div>
+
+          {/* Error Message */}
+          {error && <p className={styles.errorMessage}>{error}</p>}
 
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+            disabled={loading}
+            className={styles.submitButton}
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
 
           {/* Divider */}
-          <div className="flex items-center justify-center my-2">
-            <hr className="w-full border-gray-300" />
-            <span className="px-2 text-gray-500 text-sm">OR</span>
-            <hr className="w-full border-gray-300" />
+          <div className={styles.divider}>
+            <hr className={styles.dividerLine} />
+            <span className={styles.dividerText}>OR</span>
+            <hr className={styles.dividerLine} />
           </div>
 
           {/* Google Login */}
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className={styles.googleButton}
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
-              className="w-5 h-5"
+              className={styles.googleIcon}
             />
             Continue with Google
           </button>
         </form>
+      ) : (
+        <form className={styles.form} onSubmit={handleForgotPassword}>
+          {/* Reset Email */}
+          <div className={styles.formGroup}>
+            <label htmlFor="resetEmail" className={styles.label}>Email</label>
+            <input
+              type="email"
+              id="resetEmail"
+              className={styles.input}
+              placeholder="Enter your email"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
 
-        {/* Create Account */}
-        <p className="text-center text-sm mt-10">
-          Don’t have an account?{" "}
-          <a href="#" className="text-indigo-600 font-medium hover:underline">
-            Create one
-          </a>
-        </p>
-      </div>
+          {/* Messages */}
+          {error && <p className={styles.errorMessage}>{error}</p>}
+          {message && <p className={styles.successMessage}>{message}</p>}
+
+          {/* Reset Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={styles.submitButton}
+          >
+            {loading ? 'Sending...' : 'Send Reset Email'}
+          </button>
+
+          {/* Back to Login */}
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={() => {
+              setIsResetMode(false);
+              setError('');
+              setMessage('');
+              setResetEmail('');
+            }}
+          >
+            ← Back to Login
+          </button>
+        </form>
+      )}
+
+      {/* Create Account */}
+      <p className={styles.footer}>
+        Don't have an account?{" "}
+        <Link to="/register" className={styles.link} onClick={onClose}>
+          Create one
+        </Link>
+      </p>
+    </div>
   );
 }
 
-export default Login;
+export default LoginPage;

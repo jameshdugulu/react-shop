@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Product } from "../components/product";
+import { useProduct } from "../context/useProduct";
 import styles from './Store.module.css';
 
  function Estore() {
+  const { products, loading, error } = useProduct();
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -18,7 +20,7 @@ import styles from './Store.module.css';
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const items = [
+  const items = products.length > 0 ? products : [
     { id: 1, name: "Premium Sneakers", price: 89.99, category: "Shoes", stock: "In Stock", description: "Comfortable and stylish sneakers", imgUrl: 'https://picsum.photos/200/300?random=1' },
     { id: 2, name: "Classic Shoes", price: 75.50, category: "Shoes", stock: "Out of Stock", description: "Elegant shoes for every occasion", imgUrl: 'https://picsum.photos/200/300?random=2' },
     { id: 3, name: "Running Shoes", price: 99.99, category: "Shoes", stock: "In Stock", description: "High-performance athletic footwear", imgUrl: 'https://picsum.photos/200/300?random=3' },
@@ -119,7 +121,11 @@ import styles from './Store.module.css';
       )}
 
       <main className={styles.productsArea}>
-        {filteredItems.length > 0 ? (
+        {loading ? (
+          <p>Loading products...</p>
+        ) : error ? (
+          <p>Error loading products: {error}</p>
+        ) : filteredItems.length > 0 ? (
           <div className={styles["products-grid"]}>
             {filteredItems.map(item => (
               <Product

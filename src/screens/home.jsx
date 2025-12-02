@@ -2,7 +2,6 @@ import styles from './Home.module.css'
 import { Link } from 'react-router-dom'
 import { Product } from '../components/product'
 import { useState, useEffect, useRef } from 'react'
-import Login from '../components/loginPage'
 
 export function Home() {
   const [trendingStart, setTrendingStart] = useState(0)
@@ -195,10 +194,6 @@ export function Home() {
           </form>
         </div>
       </section>
-      {/* Login form */}
-       <div className={styles.loginContainer}>
-        <Login className={styles.loginPage} />
-       </div>
     </div>
   )
 }
